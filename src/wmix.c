@@ -11,11 +11,6 @@
 
 #include "wmix.h"
 #include "wav.h"
-#include "mad.h"
-#include "id3.h"
-#include "rtp.h"
-#include "aac.h"
-#include "g711codec.h"
 
 static WMix_Struct *main_wmix = NULL;
 
@@ -1326,6 +1321,7 @@ void wmix_record_wav_thread(WMixThread_Param *wmtp)
     free(wmtp);
 }
 
+#if 0
 void wmix_record_aac_thread(WMixThread_Param *wmtp)
 {
     char *path = (char*)&wmtp->param[6];
@@ -1851,6 +1847,7 @@ void wmix_rtp_recv_aac_thread(WMixThread_Param *wmtp)
 #if(RTP_ONE_SR)
 static SocketStruct *rtp_sr = NULL;
 #endif
+
 void wmix_rtp_send_pcma_thread(WMixThread_Param *wmtp)
 {
     char *path = (char*)&wmtp->param[6];
@@ -2254,6 +2251,7 @@ void wmix_rtp_recv_pcma_thread(WMixThread_Param *wmtp)
         wmtp->wmix->reduceMode = 1;
     free(wmtp);
 }
+#endif
 
 void wmix_load_audio_thread(WMixThread_Param *wmtp)
 {
@@ -2315,6 +2313,7 @@ void wmix_load_audio_thread(WMixThread_Param *wmtp)
     {
         wmtp->wmix->onPlayCount += 1;
         //
+#if 0
         if(len > 3 &&
             (name[len-3] == 'a' || name[len-3] == 'A') &&
             (name[len-2] == 'a' || name[len-2] == 'A') &&
@@ -2326,6 +2325,7 @@ void wmix_load_audio_thread(WMixThread_Param *wmtp)
             name[len-1] == '3')
             wmix_load_mp3(wmtp->wmix, name, msg_fd, (wmtp->flag>>8)&0xFF, (wmtp->flag>>16)&0xFF);
         else
+#endif
             wmix_load_wav(wmtp->wmix, name, msg_fd, (wmtp->flag>>8)&0xFF, (wmtp->flag>>16)&0xFF);
         //
         wmtp->wmix->onPlayCount -= 1;
@@ -2439,6 +2439,7 @@ void wmix_msg_thread(WMixThread_Param *wmtp)
                 case 8:
                     wmix->loopWord += 1;
                     break;
+#if 0
                 //rtp send pcma
                 case 11:
                     wmix_throwOut_thread(wmix, 
@@ -2463,6 +2464,7 @@ void wmix_msg_thread(WMixThread_Param *wmtp)
                         WMIX_MSG_BUFF_SIZE, 
                         &wmix_record_aac_thread);
                     break;
+#endif
             }
             continue;
         }
@@ -3156,6 +3158,7 @@ void wmix_load_wav(
         wmix->reduceMode = 1;
 }
 
+#if 0
 void wmix_load_aac(
     WMix_Struct *wmix,
     char *aacPath,
@@ -3602,6 +3605,7 @@ void wmix_load_mp3(
     //
     if(wmix->debug) printf(">> PLAY-MP3: %s end <<\n", mp3Path);
 }
+#endif
 
 //--------------- wmix main ---------------
 

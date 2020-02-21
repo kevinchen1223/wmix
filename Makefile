@@ -1,4 +1,4 @@
-# cross:=arm-linux-gnueabihf
+cross:=arm-linux-gnueabihf
 # cross:=arm-himix200-linux
 
 host:=
@@ -14,15 +14,7 @@ ROOT=$(shell pwd)
 obj-wmix+=./src/wmix.c \
 		./src/wmix.h \
 		./src/wav.c \
-		./src/wav.h \
-		./src/id3.c \
-		./src/id3.h \
-		./src/rtp.c \
-		./src/rtp.h \
-		./src/g711codec.c \
-		./src/g711codec.h \
-		./src/aac.c \
-		./src/aac.h
+		./src/wav.h
 
 obj-wmixmsg+=./test/wmix_user.c \
 		./test/wmix_user.h \
@@ -52,8 +44,10 @@ obj-recvaac+=./test/recvAAC.c \
 		./src/aac.c \
 		./src/aac.h
 
+LIBS=/mysdb2/work/test/QboxGitlab/qbox10-rootfs/rootfs/usr/local/alsa
+
 target: wmixmsg
-	@$(cc) -Wall -o wmix $(obj-wmix) -I./src -L$(ROOT)/libs/lib -I$(ROOT)/libs/include -lpthread -lasound -lm -ldl -lmad -lfaac -lfaad
+	@$(cc) -Wall -o wmix $(obj-wmix) -I./src -L$(LIBS)/lib -I$(LIBS)/include -lpthread -lasound -lm -ldl
 	@echo "---------- all complete !! ----------"
 
 wmixmsg:
@@ -65,7 +59,7 @@ sendRecvTest:
 	@$(cc) -Wall -o sendaac $(obj-sendaac) -I./src -L$(ROOT)/libs/lib -I$(ROOT)/libs/include -lfaac -lfaad
 	@$(cc) -Wall -o recvaac $(obj-recvaac) -I./src -L$(ROOT)/libs/lib -I$(ROOT)/libs/include -lfaac -lfaad
 
-libs: libalsa libmad libfaac libfaad
+libs: libalsa
 	@echo "---------- all complete !! ----------"
 
 libalsa:
